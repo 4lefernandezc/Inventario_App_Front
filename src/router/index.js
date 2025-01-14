@@ -1,8 +1,10 @@
 import AppLayout from '@/layout/AppLayout.vue';
 import { createRouter, createWebHistory } from 'vue-router';
+import { useAuthStore } from '@/stores';
+import { getTokenFromLocalStorage } from '@/helpers';
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/',
@@ -135,4 +137,16 @@ const router = createRouter({
     ]
 });
 
-export default router;
+router.beforeEach(async to => {
+    const publicPages = ["/auth/login", "/"];
+    const authRequired = !publicPages.includes(to.path);
+    const authStore = useAuthStore();
+  
+    if (authRequired && !getTokenFromLocalStorage()) {
+      if (authStore) authStore.logout();
+      authStore.returnUrl = to.fullPath;
+      return "/auth/login";
+    }
+  });
+  
+  export default router

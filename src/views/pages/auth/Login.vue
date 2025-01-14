@@ -1,10 +1,35 @@
 <script setup>
 import FloatingConfigurator from '@/components/FloatingConfigurator.vue';
 import { ref } from 'vue';
+import { useAuthStore } from "../../../stores/index.ts";
 
-const email = ref('');
-const password = ref('');
-const checked = ref(false);
+const usuario = ref("");
+const clave = ref("");
+const error = ref("");
+const isLoading = ref(false);
+
+function onSubmit() {
+    if (!usuario.value || !clave.value) {
+        error.value = "Por favor, completa todos los campos.";
+        return;
+    }
+
+    error.value = "";
+    isLoading.value = true;
+
+    const authStore = useAuthStore();
+    authStore
+        .login(usuario.value, clave.value)
+        .then(() => {
+            console.log("Inicio de sesión exitoso.");
+        })
+        .catch(() => {
+            error.value = "Usuario o contraseña incorrectos.";
+        })
+        .finally(() => {
+            isLoading.value = false;
+        });
+}
 </script>
 
 <template>
@@ -35,12 +60,12 @@ const checked = ref(false);
                         <span class="text-muted-color font-medium">Sign in to continue</span>
                     </div>
 
-                    <div>
-                        <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
-                        <InputText id="email1" type="text" placeholder="Email address" class="w-full md:w-[30rem] mb-8" v-model="email" />
+                    <form @submit.prevent="onSubmit" class="w-full">
+                        <label for="usuario" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Nombre de Usuario</label>
+                        <InputText id="usuario" type="text" placeholder="Usuario" class="w-full md:w-[30rem] mb-8" v-model="usuario" />
 
-                        <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
-                        <Password id="password1" v-model="password" placeholder="Password" :toggleMask="true" class="mb-4" fluid :feedback="false"></Password>
+                        <label for="clave" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Contraseña</label>
+                        <Password id="clave" v-model="clave" placeholder="Contraseña" :toggleMask="true" class="mb-4" fluid :feedback="false"></Password>
 
                         <div class="flex items-center justify-between mt-2 mb-8 gap-8">
                             <div class="flex items-center">
@@ -49,7 +74,17 @@ const checked = ref(false);
                             </div>
                             <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
                         </div>
-                        <Button label="Sign In" class="w-full" as="router-link" to="/"></Button>
+                        <div v-if="error" class="text-red-500 text-sm mb-4">{{ error }}</div>
+                        <button
+                            type="submit"
+                            :disabled="isLoading"
+                            class="w-full bg-primary text-white py-2 px-4 rounded-md focus:outline-none hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {{ isLoading ? "Cargando..." : "Iniciar Sesión" }}
+                        </button>
+                    </form>
+                    <div class="mt-4 text-sm text-gray-600">
+                        <a href="#" class="text-primary hover:underline">¿Olvidaste tu contraseña?</a>
                     </div>
                 </div>
             </div>
