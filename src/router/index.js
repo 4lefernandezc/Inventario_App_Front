@@ -1,7 +1,7 @@
-import AppLayout from '@/layout/AppLayout.vue';
-import { createRouter, createWebHistory } from 'vue-router';
-import { useAuthStore } from '@/stores';
 import { getTokenFromLocalStorage } from '@/helpers';
+import AppLayout from '@/layout/AppLayout.vue';
+import { useAuthStore } from '@/stores';
+import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -92,9 +92,9 @@ const router = createRouter({
                     component: () => import('@/views/uikit/TimelineDoc.vue')
                 },
                 {
-                    path: '/pages/empty',
-                    name: 'empty',
-                    component: () => import('@/views/pages/Empty.vue')
+                    path: '/pages/productos',
+                    name: 'productos',
+                    component: () => import('@/views/pages/Productos.vue')
                 },
                 {
                     path: '/pages/crud',
@@ -137,16 +137,16 @@ const router = createRouter({
     ]
 });
 
-router.beforeEach(async to => {
-    const publicPages = ["/auth/login", "/"];
+router.beforeEach(async (to) => {
+    const publicPages = ['/auth/login', '/'];
     const authRequired = !publicPages.includes(to.path);
     const authStore = useAuthStore();
-  
+
     if (authRequired && !getTokenFromLocalStorage()) {
-      if (authStore) authStore.logout();
-      authStore.returnUrl = to.fullPath;
-      return "/auth/login";
+        if (authStore) authStore.logout();
+        authStore.returnUrl = to.fullPath;
+        return '/auth/login';
     }
-  });
-  
-  export default router
+});
+
+export default router;
