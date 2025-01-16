@@ -121,6 +121,16 @@ const model = ref([
         ]
     },
     {
+        label: 'Demos',
+        items: [
+            {
+                label: 'Demo Ventas',
+                icon: 'pi pi-fw pi-shopping-cart',
+                to: '/demo-ventas'
+            },
+        ]
+    },
+    {
         label: 'Get Started',
         items: [
             {

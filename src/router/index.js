@@ -105,6 +105,11 @@ const router = createRouter({
                     path: '/documentation',
                     name: 'documentation',
                     component: () => import('@/views/pages/Documentation.vue')
+                },
+                {
+                    path: '/demo-ventas',
+                    name: 'demo-ventas',
+                    component: () => import('@/demo/mockup-venta/pages/MockupVentaView.vue')
                 }
             ]
         },
