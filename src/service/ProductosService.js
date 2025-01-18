@@ -7,6 +7,12 @@ export const ProductosService = {
     async get(id) {
         return http.get(`/productos/${id}`);
     },
+    async getByCategoria(id) {
+        return http.get(`/productos/categoria/${id}`);
+    },
+    async getByProveedor(id) {
+        return http.get(`/productos/proveedor/${id}`);
+    },
     async create(data) {
         return http.post('/productos', data);
     },
