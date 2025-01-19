@@ -1,25 +1,27 @@
 import http from '@/plugins/axios';
 
+const API_URL = '/productos';
+
 export const ProductosService = {
     async getAll(params) {
-        return http.get('/productos', { params });
+        return http.get(API_URL, { params });
     },
     async get(id) {
-        return http.get(`/productos/${id}`);
+        return http.get(`${API_URL}/${id}`);
     },
     async getByCategoria(id) {
-        return http.get(`/productos/categoria/${id}`);
+        return http.get(`${API_URL}/categoria/${id}`);
     },
     async getByProveedor(id) {
-        return http.get(`/productos/proveedor/${id}`);
+        return http.get(`${API_URL}/proveedor/${id}`);
     },
     async create(data) {
-        return http.post('/productos', data);
+        return http.post(API_URL, data);
     },
     async update(id, data) {
-        return http.patch(`/productos/${id}`, data);
+        return http.patch(`${API_URL}/${id}`, data);
     },
     async delete(id) {
-        return http.delete(`/productos/${id}`);
+        return http.delete(`${API_URL}/${id}`);
     }
 };
