@@ -41,7 +41,7 @@ const params = ref({
     sidx: 'id',
     codigo: '',
     nombre: '',
-    active: true
+    // activo: true
 });
 
 onMounted(async () => {
@@ -85,7 +85,12 @@ async function getProveedores() {
 }
 
 function openNew() {
-    producto.value = {};
+    producto.value = {
+        codigo: '',
+        nombre: '',
+        descripcion: '',
+        activo: false
+    };
     productoDialog.value = true;
 }
 
@@ -105,11 +110,12 @@ async function createProducto() {
     try {
         const response = await ProductosService.create(producto.value);
         productos.value.push(response.data);
+        getProducts();
+        productoDialog.value = false;
         toast.add({ severity: 'success', summary: 'Éxito', detail: 'Producto creado', life: 3000 });
     } catch (e) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Error al crear el producto', life: 3000 });
     }
-    productoDialog.value = false;
 }
 
 async function updateProducto(id: number, prod: Producto) {
@@ -121,11 +127,12 @@ async function updateProducto(id: number, prod: Producto) {
         const response = await ProductosService.update(id, prodToUpdate);
         const index = productos.value.findIndex((p) => p.id === id);
         productos.value[index] = response.data.producto;
+        getProducts();
+        productoDialog.value = false;
         toast.add({ severity: 'success', summary: 'Éxito', detail: 'Producto actualizado', life: 3000 });
     } catch (e) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar el producto', life: 3000 });
     }
-    productoDialog.value = false;
 }
 
 function confirmDeleteProducto(prod: Producto) {
@@ -185,7 +192,7 @@ function editProducto(prod: Producto) {
                 </template>
             </Column>
         </DataTable>
-        <Dialog v-model:visible="productoDialog" :style="{ width: '450px' }" :modal="true" header="Proveedor">
+        <Dialog v-model:visible="productoDialog" :style="{ width: '450px' }" :modal="true" header="Producto">
             <div class="flex flex-col gap-6">
                 <div class="flex flex-col gap-2">
                     <label for="codigo">Código</label>

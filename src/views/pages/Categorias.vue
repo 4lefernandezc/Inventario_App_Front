@@ -26,7 +26,11 @@ const filters = ref({
 });
 
 function openNew() {
-    categoria.value = {};
+    categoria.value = {
+        nombre: '',
+        descripcion: '',
+        activo: false
+    };
     categoriaDialog.value = true;
 }
 
@@ -46,11 +50,11 @@ async function createCategoria() {
     try {
         const response = await CategoriasService.create(categoria.value);
         categorias.value.push(response.data);
+        categoriaDialog.value = false;
         toast.add({ severity: 'success', summary: 'Éxito', detail: 'Categoría creada', life: 3000 });
     } catch (e) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Error al crear la categoría', life: 3000 });
     }
-    categoriaDialog.value = false;
 }
 
 async function updateCategoria(id: number, categ: Categoria) {
@@ -58,11 +62,11 @@ async function updateCategoria(id: number, categ: Categoria) {
         const response = await CategoriasService.update(id, categ);
         const index = categorias.value.findIndex((r) => r.id === id);
         categorias.value[index] = response.data.categoria;
+        categoriaDialog.value = false;
         toast.add({ severity: 'success', summary: 'Éxito', detail: 'Categoría actualizada', life: 3000 });
     } catch (e) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar la categoría', life: 3000 });
     }
-    categoriaDialog.value = false;
 }
 
 function confirmDeleteCategoria(categ: Categoria) {

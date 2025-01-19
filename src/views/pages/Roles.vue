@@ -44,11 +44,11 @@ async function createRol() {
     try {
         const response = await RolesService.create(rol.value);
         roles.value.push(response.data);
+        rolDialog.value = false;
         toast.add({ severity: 'success', summary: 'Éxito', detail: 'Rol creado', life: 3000 });
     } catch (e) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Error al crear el rol', life: 3000 });
     }
-    rolDialog.value = false;
 }
 
 async function updateRol(id: number, rol: Rol) {
@@ -56,11 +56,11 @@ async function updateRol(id: number, rol: Rol) {
         const response = await RolesService.update(id, rol);
         const index = roles.value.findIndex((r) => r.id === id);
         roles.value[index] = response.data.rol;
+        rolDialog.value = false;
         toast.add({ severity: 'success', summary: 'Éxito', detail: 'Rol actualizado', life: 3000 });
     } catch (e) {
         toast.add({ severity: 'error', summary: 'Error', detail: 'Error al actualizar el rol', life: 3000 });
     }
-    rolDialog.value = false;
 }
 
 function confirmDeleteRol(role: Rol) {

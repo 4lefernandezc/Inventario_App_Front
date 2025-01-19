@@ -31,7 +31,9 @@ const filters = ref({
 const submitted = ref(false);
 
 function openNew() {
-    proveedor.value = {};
+    proveedor.value = {
+        activo: false
+    };
     submitted.value = false;
     proveedorDialog.value = true;
 }

@@ -39,11 +39,17 @@ const params = ref({
     sidx: 'id',
     documento: '',
     nombre: '',
-    active: true
+    // activo: true
 });
 
 function openNew() {
-    cliente.value = {};
+    cliente.value = {
+        documento: '',
+        tipoDocumento: '',
+        nombre: '',
+        apellido: '',
+        activo: false
+    };
     clienteDialog.value = true;
 }
 
@@ -63,11 +69,11 @@ async function createCliente() {
     loading.value = true;
     try {
         await ClientesService.create(cliente.value);
-        toast.add({ severity: 'success', summary: 'Successful', detail: 'Cliente Created', life: 3000 });
+        toast.add({ severity: 'success', summary: 'Éxito', detail: 'Cliente Creado', life: 3000 });
         hideDialog();
         await getClientes();
     } catch (error) {
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Error creating Cliente', life: 3000 });
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Error creando Cliente', life: 3000 });
     } finally {
         loading.value = false;
     }
@@ -81,11 +87,11 @@ async function updateCliente() {
         delete cliente.value.linkWhatsapp;
         console.log(cliente.value);
         await ClientesService.update(cliente.value.id, cliente.value);
-        toast.add({ severity: 'success', summary: 'Successful', detail: 'Cliente Updated', life: 3000 });
+        toast.add({ severity: 'success', summary: 'Éxito', detail: 'Cliente Actualizado', life: 3000 });
         hideDialog();
         await getClientes();
     } catch (error) {
-        let errorMessage = 'Error updating Cliente';
+        let errorMessage = 'Error actualizando Cliente';
         if (error.response && error.response.data && error.response.data.message) {
             errorMessage = error.response.data.message;
         }
@@ -99,11 +105,11 @@ async function deleteCliente() {
     loading.value = true;
     try {
         await ClientesService.delete(cliente.value.id);
-        toast.add({ severity: 'success', summary: 'Successful', detail: 'Cliente Deleted', life: 3000 });
+        toast.add({ severity: 'success', summary: 'Éxito', detail: 'Cliente Eliminado', life: 3000 });
         hideDialog();
         await getClientes();
     } catch (error) {
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Error deleting Cliente', life: 3000 });
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Error eliminando Cliente', life: 3000 });
     } finally {
         loading.value = false;
     }
@@ -173,7 +179,7 @@ onMounted(() => {
                 </template>
             </Column>
         </DataTable>
-        <Dialog v-model:visible="clienteDialog" :style="{ width: '450px' }" :modal="true" header="Proveedor">
+        <Dialog v-model:visible="clienteDialog" :style="{ width: '450px' }" :modal="true" header="Cliente">
             <div class="flex flex-col gap-6">
                 <div class="flex flex-col gap-2">
                     <label for="documento">Documento</label>
@@ -205,7 +211,7 @@ onMounted(() => {
                 </div>
                 <div class="flex flex-col gap-2">
                     <label for="activo">Activo</label>
-                    <ToggleSwitch v-model="cliente.activo" />
+                    <ToggleSwitch v-model="cliente.activo" :default-value="false" />
                 </div>
                 <div class="flex justify-end gap-2">
                     <Button label="Cancelar" class="p-button-text" @click="hideDialog" />
