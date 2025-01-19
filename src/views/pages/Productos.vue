@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LabelStatus from '@/components/LabelStatus.vue';
 import { CategoriasService } from '@/service/CategoriasService';
 import { ProductosService } from '@/service/ProductosService';
 import { ProveedoresService } from '@/service/ProveedoresService';
@@ -33,25 +34,20 @@ const productoDialog = ref(false);
 const deleteProductoDialog = ref(false);
 const filters = ref(null);
 
-const estado = reactive([
-    { label: 'Sí', value: true },
-    { label: 'No', value: false }
-]);
-
 const params = ref({
     page: 1,
-    limit: 40,
-    sord: 'desc',
-    sidx: '',
+    limit: 10,
+    sord: 'ASC',
+    sidx: 'id',
     codigo: '',
     nombre: '',
     active: true
 });
 
 onMounted(async () => {
-    await getProducts();
-    await getCategorias();
-    await getProveedores();
+    getProducts();
+    getCategorias();
+    getProveedores();
 });
 
 async function getProducts() {
@@ -157,7 +153,7 @@ function editProducto(prod: Producto) {
     <div className="card">
         <Toolbar class="mb-6">
             <template #start>
-                <Button label="Nuevo" icon="pi pi-plus" class="p-button-success" @click="openNew"></Button>
+                <Button label="Nuevo Producto" icon="pi pi-plus" severity="primary" class="mr-2" @click="openNew" />
             </template>
         </Toolbar>
         <DataTable
@@ -175,9 +171,13 @@ function editProducto(prod: Producto) {
             <Column field="descripcion" header="Descripción"></Column>
             <Column field="precioCompra" header="Precio Compra"></Column>
             <Column field="precioVenta" header="Precio Venta"></Column>
-            <Column field="activo" header="Activo"></Column>
             <Column field="categoria.nombre" header="Categoría"></Column>
             <Column field="proveedor.nombre" header="Proveedor"></Column>
+            <Column header="Estado">
+                <template #body="slotProps">
+                    <LabelStatus :isActive="slotProps.data.activo" />
+                </template>
+            </Column>
             <Column style="min-width: 12rem">
                 <template #body="slotProps">
                     <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editProducto(slotProps.data)" />
@@ -208,16 +208,16 @@ function editProducto(prod: Producto) {
                     <InputNumber v-model="producto.precioVenta" mode="currency" currency="BOB" />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="activo">Activo</label>
-                    <Select v-model="producto.activo" :options="estado" optionLabel="label" optionValue="value" />
-                </div>
-                <div class="flex flex-col gap-2">
                     <label for="categoria">Categoría</label>
                     <Select v-model="producto.idCategoria" :options="categorias" optionLabel="nombre" optionValue="id" />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label for="proveedor">Proveedor</label>
                     <Select v-model="producto.idProveedor" :options="proveedores" optionLabel="nombre" optionValue="id" />
+                </div>
+                <div class="flex flex-col gap-2">
+                    <label for="activo">Activo</label>
+                    <ToggleSwitch v-model="producto.activo" :default-value="false" />
                 </div>
                 <div class="flex justify-end gap-2">
                     <Button label="Cancelar" class="p-button-text" @click="hideDialog" />

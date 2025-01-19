@@ -34,9 +34,9 @@ const filters = ref({
 
 const params = ref({
     page: 1,
-    limit: 40,
-    sord: 'asc',
-    sidx: '',
+    limit: 10,
+    sord: 'ASC',
+    sidx: 'id',
     documento: '',
     nombre: '',
     active: true
@@ -143,7 +143,7 @@ onMounted(() => {
     <div className="card">
         <Toolbar class="mb-6">
             <template #start>
-                <Button label="Nuevo" icon="pi pi-plus" class="p-button-success" @click="openNew"></Button>
+                <Button label="Nuevo Cliente" icon="pi pi-plus" severity="primary" class="mr-2" @click="openNew"/>
             </template>
         </Toolbar>
         <DataTable :value="clientes" :loading="loading" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20]" dataKey="id" :globalFilter="filters.global.value" :filters="filters">
@@ -154,7 +154,11 @@ onMounted(() => {
             <Column field="direccion" header="Dirección" :filter="true"></Column>
             <Column field="telefono" header="Teléfono" :filter="true"></Column>
             <Column field="correo" header="Correo" :filter="true"></Column>
-            <Column field="activo" header="Activo" :filter="true"></Column>
+            <Column header="Estado">
+                <template #body="slotProps">
+                    <LabelStatus :isActive="slotProps.data.activo" />
+                </template>
+            </Column>
             <Column field="linkWhatsapp" header="Whatsapp">
                 <template #body="slotProps">
                     <a v-if="slotProps.data.linkWhatsapp && slotProps.data.linkWhatsapp !== ''" :href="slotProps.data.linkWhatsapp" target="_blank">

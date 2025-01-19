@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LabelStatus from '@/components/LabelStatus.vue';
 import { ProveedoresService } from '@/service/ProveedoresService';
 import { FilterMatchMode } from '@primevue/core/api';
 import Column from 'primevue/column';
@@ -122,7 +123,7 @@ onMounted(() => {
     <div className="card">
         <Toolbar class="mb-6">
             <template #start>
-                <Button label="Nuevo Proveedor" icon="pi pi-plus" severity="secondary" class="mr-2" @click="openNew" />
+                <Button label="Nuevo Proveedor" icon="pi pi-plus" severity="primary" class="mr-2" @click="openNew" />
             </template>
         </Toolbar>
 
@@ -137,23 +138,15 @@ onMounted(() => {
             :rowsPerPageOptions="[5, 10, 20]"
             :currentPageReportTemplate="`Mostrando {first} a {last} de {totalRecords} proveedores`"
         >
-            <template #header>
-                <div class="flex flex-wrap gap-2 items-center justify-between">
-                    <h4 class="m-0">Lista de Proveedores</h4>
-                    <IconField>
-                        <InputIcon>
-                            <i class="pi pi-search" />
-                        </InputIcon>
-                        <InputText v-model="filters['global'].value" placeholder="Buscar..." />
-                    </IconField>
-                </div>
-            </template>
-
             <Column field="nombre" header="Nombre"></Column>
             <Column field="direccion" header="Dirección"></Column>
             <Column field="telefono" header="Teléfono"></Column>
             <Column field="correo" header="Correo"></Column>
-            <Column field="activo" header="Activo"></Column>
+            <Column header="Estado">
+                <template #body="slotProps">
+                    <LabelStatus :isActive="slotProps.data.activo" />
+                </template>
+            </Column>
             <Column field="linkWhatsapp" header="Whatsapp">
                 <template #body="slotProps">
                     <a v-if="slotProps.data.linkWhatsapp && slotProps.data.linkWhatsapp !== ''" :href="slotProps.data.linkWhatsapp" target="_blank">
@@ -194,7 +187,7 @@ onMounted(() => {
             </div>
             <div class="flex flex-col gap-2">
                 <label for="activo">Activo</label>
-                <ToggleSwitch v-model="proveedor.activo" />
+                <ToggleSwitch v-model="proveedor.activo" :default-value="false" />
             </div>
             <div class="flex flex-col gap-2">
                 <label for="linkWhatsapp">Whatsapp</label>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LabelStatus from '@/components/LabelStatus.vue';
 import { CategoriasService } from '@/service/CategoriasService';
 import { FilterMatchMode } from '@primevue/core/api';
 import Column from 'primevue/column';
@@ -85,16 +86,21 @@ function editCategoria(categ: Categoria) {
     categoriaDialog.value = true;
 }
 
-onMounted(async () => {
+async function getCategorias() {
+    loading.value = true;
     try {
-        loading.value = true;
         const response = await CategoriasService.getAll();
         categorias.value = response.data;
+        console.log(categorias.value);
     } catch (e) {
         error.value = e;
     } finally {
         loading.value = false;
     }
+}
+
+onMounted(() => {
+    getCategorias();
 });
 </script>
 
@@ -102,13 +108,17 @@ onMounted(async () => {
     <div className="card">
         <Toolbar class="mb-6">
             <template #start>
-                <Button label="Nueva Categoria" icon="pi pi-plus" severity="secondary" class="mr-2" @click="openNew" />
+                <Button label="Nueva Categoria" icon="pi pi-plus" severity="primary" class="mr-2" @click="openNew" />
             </template>
         </Toolbar>
         <DataTable :value="categorias" :loading="loading" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20]" :globalFilter="filters.global.value" :filters="filters" dataKey="id">
             <Column field="nombre" header="Nombre" :filter="true"></Column>
             <Column field="descripcion" header="Descripción" :filter="true"></Column>
-            <Column field="activo" header="Activo" :filter="true"></Column>
+            <Column header="Estado">
+                <template #body="slotProps">
+                    <LabelStatus :isActive="slotProps.data.activo" />
+                </template>
+            </Column>
             <Column style="min-width: 12rem">
                 <template #body="slotProps" header="Acciones">
                     <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editCategoria(slotProps.data)" />

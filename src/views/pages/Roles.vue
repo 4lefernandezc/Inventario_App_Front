@@ -84,15 +84,21 @@ function editRol(role: Rol) {
     rolDialog.value = true;
 }
 
-onMounted(async () => {
+async function getRoles() {
     loading.value = true;
     try {
         const response = await RolesService.getAll();
         roles.value = response.data;
+        console.log(roles.value);
     } catch (e) {
         error.value = e;
+    } finally {
+        loading.value = false;
     }
-    loading.value = false;
+}
+
+onMounted(() => {
+    getRoles();
 });
 </script>
 
@@ -100,7 +106,7 @@ onMounted(async () => {
     <div className="card">
         <Toolbar class="mb-6">
             <template #start>
-                <Button label="Nuevo Rol" icon="pi pi-plus" severity="secondary" class="mr-2" @click="openNew" />
+                <Button label="Nuevo Rol" icon="pi pi-plus" severity="primary" class="mr-2" @click="openNew"/>
             </template>
         </Toolbar>
         <DataTable :value="roles" :loading="loading" :rows="10" :globalFilter="filters.global.value" :filters="filters" dataKey="id">
