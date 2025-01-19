@@ -173,6 +173,14 @@ function editProducto(prod: Producto) {
             :rowsPerPageOptions="[5, 10, 20]"
             :currentPageReportTemplate="`Mostrando {first} a {last} de {totalRecords} productos`"
         >
+            <template #empty>
+                <p class="text-center my-5">No se encontraron datos 🔎</p>
+            </template>
+            <Column header="#" xstyle="max-width: 50px">
+                <template #body="slotProps">
+                    {{ slotProps.index + 1 }}
+                </template>
+            </Column>
             <Column field="codigo" header="Código" sortable></Column>
             <Column field="nombre" header="Nombre"></Column>
             <Column field="descripcion" header="Descripción"></Column>
@@ -185,7 +193,7 @@ function editProducto(prod: Producto) {
                     <LabelStatus :isActive="slotProps.data.activo" />
                 </template>
             </Column>
-            <Column style="min-width: 12rem">
+            <Column header="Acciones" style="min-width: 8rem">
                 <template #body="slotProps">
                     <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editProducto(slotProps.data)" />
                     <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteProducto(slotProps.data)" />

@@ -110,10 +110,18 @@ onMounted(() => {
             </template>
         </Toolbar>
         <DataTable :value="roles" :loading="loading" :rows="10" :globalFilter="filters.global.value" :filters="filters" dataKey="id">
+            <template #empty>
+                <p class="text-center my-5">No se encontraron datos 🔎</p>
+            </template>
+            <Column header="#" xstyle="max-width: 50px">
+                <template #body="slotProps">
+                    {{ slotProps.index + 1 }}
+                </template>
+            </Column>
             <Column field="nombre" header="Nombre" filterMatchMode="contains"></Column>
             <Column field="descripcion" header="Descripción" filterMatchMode="contains"></Column>
-            <Column style="min-width: 12rem">
-                <template #body="slotProps" header="Acciones">
+            <Column header="Acciones" style="min-width: 8rem">
+                <template #body="slotProps">
                     <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editRol(slotProps.data)" />
                     <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteRol(slotProps.data)" />
                 </template>

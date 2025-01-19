@@ -140,6 +140,14 @@ onMounted(() => {
             :rowsPerPageOptions="[5, 10, 20]"
             :currentPageReportTemplate="`Mostrando {first} a {last} de {totalRecords} proveedores`"
         >
+            <template #empty>
+                <p class="text-center my-5">No se encontraron datos 🔎</p>
+            </template>
+            <Column header="#" xstyle="max-width: 50px">
+                <template #body="slotProps">
+                    {{ slotProps.index + 1 }}
+                </template>
+            </Column>
             <Column field="nombre" header="Nombre"></Column>
             <Column field="direccion" header="Dirección"></Column>
             <Column field="telefono" header="Teléfono"></Column>
@@ -156,7 +164,7 @@ onMounted(() => {
                     </a>
                 </template>
             </Column>
-            <Column style="min-width: 12rem">
+            <Column header="Acciones" style="min-width: 8rem">
                 <template #body="slotProps">
                     <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editProveedor(slotProps.data)" />
                     <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteProveedor(slotProps.data)" />

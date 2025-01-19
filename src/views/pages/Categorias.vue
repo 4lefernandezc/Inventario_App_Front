@@ -116,6 +116,14 @@ onMounted(() => {
             </template>
         </Toolbar>
         <DataTable :value="categorias" :loading="loading" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20]" :globalFilter="filters.global.value" :filters="filters" dataKey="id">
+            <template #empty>
+                <p class="text-center my-5">No se encontraron datos 🔎</p>
+            </template>
+            <Column header="#" xstyle="max-width: 50px">
+                <template #body="slotProps">
+                    {{ slotProps.index + 1 }}
+                </template>
+            </Column>
             <Column field="nombre" header="Nombre" :filter="true"></Column>
             <Column field="descripcion" header="Descripción" :filter="true"></Column>
             <Column header="Estado">
@@ -123,7 +131,7 @@ onMounted(() => {
                     <LabelStatus :isActive="slotProps.data.activo" />
                 </template>
             </Column>
-            <Column style="min-width: 12rem">
+            <Column header="Acciones" style="min-width: 8rem">
                 <template #body="slotProps" header="Acciones">
                     <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editCategoria(slotProps.data)" />
                     <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteCategoria(slotProps.data)" />

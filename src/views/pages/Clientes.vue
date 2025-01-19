@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import PaginatorCommon from '@/components/PaginatorCommon.vue';
 import { ClientesService } from '@/service/ClientesService';
-import { FilterMatchMode } from '@primevue/core/api';
+import { Select } from 'primevue';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
 import { useToast } from 'primevue/usetoast';
@@ -21,25 +22,28 @@ interface Cliente {
     fechaModificacion?: string;
 }
 
-const clientes = ref([]);
+const clientes = ref<Cliente[]>([]);
 const cliente = ref<Cliente>({});
 const loading = ref(false);
-const error = ref(null);
 const toast = useToast();
 const clienteDialog = ref(false);
 const deleteClienteDialog = ref(false);
-const filters = ref({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS }
-});
+const showFilters = ref(true);
 
-const params = ref({
+// Filtros extendidos
+const filters = ref({
     page: 1,
     limit: 10,
     sord: 'ASC',
     sidx: 'id',
-    documento: '',
-    nombre: '',
-    // activo: true
+    documento: null,
+    tipoDocumento: null,
+    nombre: null,
+    apellido: null,
+    direccion: null,
+    telefono: null,
+    correo: null,
+    activo: null
 });
 
 function openNew() {
@@ -51,6 +55,34 @@ function openNew() {
         activo: false
     };
     clienteDialog.value = true;
+}
+
+const datatable = ref({
+    total: 0
+});
+
+// Función para limpiar filtros
+function clearFilters() {
+    filters.value = {
+        page: 1,
+        limit: 10,
+        sord: 'ASC',
+        sidx: 'id',
+        documento: '',
+        tipoDocumento: '',
+        nombre: '',
+        apellido: '',
+        direccion: '',
+        telefono: '',
+        correo: '',
+        activo: null
+    };
+    getClientes();
+}
+
+// Toggle filters visibility
+function toggleFilters() {
+    showFilters.value = !showFilters.value;
 }
 
 function hideDialog() {
@@ -130,14 +162,26 @@ function confirmDeleteCliente(clien: Cliente) {
 async function getClientes() {
     loading.value = true;
     try {
-        const response = await ClientesService.getAll(params.value);
+        const response = await ClientesService.getAll({
+            ...filters.value
+        });
         clientes.value = response.data.data;
-        console.log(clientes.value);
+        datatable.value.total = response.data.total;
     } catch (e) {
-        error.value = e;
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Error al cargar clientes', life: 3000 });
     } finally {
         loading.value = false;
     }
+}
+
+function onPageChange(event: number) {
+    filters.value.page = event;
+    getClientes();
+}
+
+function onFilterChange() {
+    filters.value.page = 1;
+    getClientes();
 }
 
 onMounted(() => {
@@ -146,25 +190,89 @@ onMounted(() => {
 </script>
 
 <template>
-    <div className="card">
+    <div class="card">
         <Toolbar class="mb-6">
             <template #start>
-                <Button label="Nuevo Cliente" icon="pi pi-plus" severity="primary" class="mr-2" @click="openNew"/>
+                <Button label="Nuevo Cliente" icon="pi pi-plus" severity="primary" class="mr-2" @click="openNew" />
+            </template>
+            <template #end>
+                <Button :label="showFilters ? 'Ocultar Filtros' : 'Mostrar Filtros'" :icon="showFilters ? 'pi pi-eye-slash' : 'pi pi-eye'" severity="secondary" class="mr-2" @click="toggleFilters" />
+                <Button label="Limpiar Filtros" icon="pi pi-filter-slash" severity="secondary" @click="clearFilters" />
             </template>
         </Toolbar>
-        <DataTable :value="clientes" :loading="loading" :paginator="true" :rows="10" :rowsPerPageOptions="[5, 10, 20]" dataKey="id" :globalFilter="filters.global.value" :filters="filters">
-            <Column field="documento" header="Documento" :filter="true"></Column>
-            <Column field="tipoDocumento" header="Tipo Documento" :filter="true"></Column>
-            <Column field="nombre" header="Nombre" :filter="true"></Column>
-            <Column field="apellido" header="Apellido" :filter="true"></Column>
-            <Column field="direccion" header="Dirección" :filter="true"></Column>
-            <Column field="telefono" header="Teléfono" :filter="true"></Column>
-            <Column field="correo" header="Correo" :filter="true"></Column>
-            <Column header="Estado">
+
+        <DataTable :value="clientes" :loading="loading" dataKey="id" :filterDisplay="showFilters ? 'row' : 'menu'" :sortOrder="filters.sord === 'ASC' ? 1 : -1" :sortField="filters.sidx" showGridlines class="p-datatable-sm">
+            <template #empty>
+                <p class="text-center my-5">No se encontraron datos 🔎</p>
+            </template>
+            <!-- Indice columna -->
+            <Column header="#" style="max-width: 50px">
+                <template #body="slotProps">
+                    {{ (filters.page - 1) * filters.limit + slotProps.index + 1 }}
+                </template>
+            </Column>
+
+            <!-- Columns con filtros -->
+            <Column field="nombre" header="Nombre" :showFilterMenu="false">
+                <template #filter>
+                    <InputText v-if="showFilters" v-model.trim="filters.nombre" type="text" class="p-inputtext-sm" placeholder="Buscar por nombre" maxlength="30" @input="onFilterChange" />
+                </template>
+            </Column>
+
+            <Column field="apellido" header="Apellido" :showFilterMenu="false">
+                <template #filter>
+                    <InputText v-if="showFilters" v-model.trim="filters.apellido" type="text" class="p-inputtext-sm" placeholder="Buscar apellido" @input="onFilterChange" />
+                </template>
+            </Column>
+
+            <Column field="documento" header="Documento" :showFilterMenu="false">
+                <template #filter>
+                    <InputText v-if="showFilters" v-model.trim="filters.documento" type="text" class="p-inputtext-sm" placeholder="Buscar por documento" maxlength="30" @input="onFilterChange" />
+                </template>
+            </Column>
+
+            <Column field="tipoDocumento" header="Tipo Documento" :showFilterMenu="false">
+                <template #filter>
+                    <InputText v-if="showFilters" v-model.trim="filters.tipoDocumento" type="text" class="p-inputtext-sm" placeholder="Buscar tipo" @input="onFilterChange" />
+                </template>
+            </Column>
+
+            <Column field="telefono" header="Teléfono" :showFilterMenu="false">
+                <template #filter>
+                    <InputText v-if="showFilters" v-model.trim="filters.telefono" type="text" class="p-inputtext-sm" placeholder="Buscar teléfono" @input="onFilterChange" />
+                </template>
+            </Column>
+
+            <Column field="correo" header="Correo" :showFilterMenu="false">
+                <template #filter>
+                    <InputText v-if="showFilters" v-model.trim="filters.correo" type="text" class="p-inputtext-sm" placeholder="Buscar correo" @input="onFilterChange" />
+                </template>
+            </Column>
+
+            <!-- Active status column -->
+            <Column field="activo" header="Activo">
+                <template #filter>
+                    <Select
+                        v-if="showFilters"
+                        v-model="filters.activo"
+                        :options="[
+                            { label: 'Todos', value: null },
+                            { label: 'Activo', value: true },
+                            { label: 'Inactivo', value: false }
+                        ]"
+                        optionLabel="label"
+                        optionValue="value"
+                        placeholder="Filtrar estado"
+                        class="p-column-filter w-full"
+                        @change="onFilterChange"
+                    />
+                </template>
                 <template #body="slotProps">
                     <LabelStatus :isActive="slotProps.data.activo" />
                 </template>
             </Column>
+
+            <!-- WhatsApp and actions columns -->
             <Column field="linkWhatsapp" header="Whatsapp">
                 <template #body="slotProps">
                     <a v-if="slotProps.data.linkWhatsapp && slotProps.data.linkWhatsapp !== ''" :href="slotProps.data.linkWhatsapp" target="_blank">
@@ -172,13 +280,19 @@ onMounted(() => {
                     </a>
                 </template>
             </Column>
-            <Column style="min-width: 12rem">
+
+            <Column header="Acciones" style="min-width: 8rem">
                 <template #body="slotProps">
                     <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editCliente(slotProps.data)" />
                     <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteCliente(slotProps.data)" />
                 </template>
             </Column>
         </DataTable>
+
+        <div class="flex justify-center mt-4">
+            <PaginatorCommon :filters="filters" :datatable="datatable" @eToPage="onPageChange" @eRefresh="getClientes" />
+        </div>
+
         <Dialog v-model:visible="clienteDialog" :style="{ width: '450px' }" :modal="true" header="Cliente">
             <div class="flex flex-col gap-6">
                 <div class="flex flex-col gap-2">
