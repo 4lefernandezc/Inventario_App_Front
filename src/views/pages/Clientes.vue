@@ -337,7 +337,7 @@ onMounted(() => {
         <Dialog v-model:visible="deleteClienteDialog" :style="{ width: '450px' }" :modal="true" header="Confirmar">
             <div class="confirmation-content">
                 <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem" />
-                <span>¿Estás seguro de que quieres eliminar el proveedor?</span>
+                <span>¿Estás seguro de que quieres eliminar el cliente?</span>
             </div>
             <div class="flex justify-end gap-2">
                 <Button label="Cancelar" class="p-button-text" @click="deleteClienteDialog = false" />
