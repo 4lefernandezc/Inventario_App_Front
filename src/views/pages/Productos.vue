@@ -134,6 +134,8 @@ function onPageChange(event: number) {
 
 function onFilterChange() {
     filters.value.page = 1;
+    if (filters.value.codigo === '') filters.value.codigo = null;
+    if (filters.value.nombre === '') filters.value.nombre = null;
     getProducts();
 }
 
@@ -236,26 +238,26 @@ function handleBlur(field: string) {
             <!-- Columnas con filtros -->
             <Column field="codigo" header="Código" :showFilterMenu="false">
                 <template #filter>
-                    <InputText v-if="showFilters" v-model.trim="filters.codigo" type="text" class="p-inputtext-sm" placeholder="Buscar código" @blur="onFilterChange" />
+                    <InputText v-if="showFilters" v-model.trim="filters.codigo" type="text" class="p-inputtext-sm" placeholder="Buscar código" @blur="filters.codigo !== null ? onFilterChange() : null" />
                 </template>
             </Column>
 
             <Column field="nombre" header="Nombre" :showFilterMenu="false">
                 <template #filter>
-                    <InputText v-if="showFilters" v-model.trim="filters.nombre" type="text" class="p-inputtext-sm" placeholder="Buscar nombre" @blur="onFilterChange" />
+                    <InputText v-if="showFilters" v-model.trim="filters.nombre" type="text" class="p-inputtext-sm" placeholder="Buscar nombre" @blur="filters.codigo !== null ? onFilterChange() : null" />
                 </template>
             </Column>
 
             <Column field="precioCompra" header="Precio Compra" :showFilterMenu="false">
                 <template #filter>
-                    <InputNumber v-if="showFilters" v-model="filters.precioCompra" mode="currency" currency="BOB" class="p-inputtext-sm" @blur="handleBlur('precioCompra')" />
+                    <InputNumber v-if="showFilters" v-model="filters.precioCompra" mode="currency" currency="BOB" class="p-inputtext-sm" @blur="filters.precioCompra !== null ? handleBlur('precioCompra') : null" />
                 </template>
                 <template #body="slotProps"> {{ slotProps.data.precioCompra }} Bs </template>
             </Column>
 
             <Column field="precioVenta" header="Precio Venta" :showFilterMenu="false">
                 <template #filter>
-                    <InputNumber v-if="showFilters" v-model="filters.precioVenta" mode="currency" currency="BOB" class="p-inputtext-sm" @blur="handleBlur('precioVenta')" />
+                    <InputNumber v-if="showFilters" v-model="filters.precioVenta" mode="currency" currency="BOB" class="p-inputtext-sm" @blur="filters.precioCompra !== null ? handleBlur('precioVenta') : null" />
                 </template>
                 <template #body="slotProps"> {{ slotProps.data.precioVenta }} Bs </template>
             </Column>
