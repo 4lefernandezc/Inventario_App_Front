@@ -215,42 +215,42 @@ onMounted(() => {
             <!-- Columns con filtros -->
             <Column field="nombre" header="Nombre" :showFilterMenu="false">
                 <template #filter>
-                    <InputText v-if="showFilters" v-model.trim="filters.nombre" type="text" class="p-inputtext-sm" placeholder="Buscar por nombre" maxlength="30" @input="onFilterChange" />
+                    <InputText v-if="showFilters" v-model.trim="filters.nombre" type="text" class="p-inputtext-sm" placeholder="Buscar por nombre" maxlength="30" @blur="onFilterChange" />
                 </template>
             </Column>
 
             <Column field="apellido" header="Apellido" :showFilterMenu="false">
                 <template #filter>
-                    <InputText v-if="showFilters" v-model.trim="filters.apellido" type="text" class="p-inputtext-sm" placeholder="Buscar apellido" @input="onFilterChange" />
+                    <InputText v-if="showFilters" v-model.trim="filters.apellido" type="text" class="p-inputtext-sm" placeholder="Buscar apellido" @blur="onFilterChange" />
                 </template>
             </Column>
 
             <Column field="documento" header="Documento" :showFilterMenu="false">
                 <template #filter>
-                    <InputText v-if="showFilters" v-model.trim="filters.documento" type="text" class="p-inputtext-sm" placeholder="Buscar por documento" maxlength="30" @input="onFilterChange" />
+                    <InputText v-if="showFilters" v-model.trim="filters.documento" type="text" class="p-inputtext-sm" placeholder="Buscar por documento" maxlength="30" @blur="onFilterChange" />
                 </template>
             </Column>
 
             <Column field="tipoDocumento" header="Tipo Documento" :showFilterMenu="false">
                 <template #filter>
-                    <InputText v-if="showFilters" v-model.trim="filters.tipoDocumento" type="text" class="p-inputtext-sm" placeholder="Buscar tipo" @input="onFilterChange" />
+                    <InputText v-if="showFilters" v-model.trim="filters.tipoDocumento" type="text" class="p-inputtext-sm" placeholder="Buscar tipo" @blur="onFilterChange" />
                 </template>
             </Column>
 
             <Column field="telefono" header="Teléfono" :showFilterMenu="false">
                 <template #filter>
-                    <InputText v-if="showFilters" v-model.trim="filters.telefono" type="text" class="p-inputtext-sm" placeholder="Buscar teléfono" @input="onFilterChange" />
+                    <InputText v-if="showFilters" v-model.trim="filters.telefono" type="text" class="p-inputtext-sm" placeholder="Buscar teléfono" @blur="onFilterChange" />
                 </template>
             </Column>
 
             <Column field="correo" header="Correo" :showFilterMenu="false">
                 <template #filter>
-                    <InputText v-if="showFilters" v-model.trim="filters.correo" type="text" class="p-inputtext-sm" placeholder="Buscar correo" @input="onFilterChange" />
+                    <InputText v-if="showFilters" v-model.trim="filters.correo" type="text" class="p-inputtext-sm" placeholder="Buscar correo" @blur="onFilterChange" />
                 </template>
             </Column>
 
             <!-- Active status column -->
-            <Column field="activo" header="Activo">
+            <Column field="activo" header="Activo" :showFilterMenu="false">
                 <template #filter>
                     <Select
                         v-if="showFilters"
