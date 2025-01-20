@@ -1,0 +1,20 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  & .input,
+  :deep(.p-inputnumber-input) ,
+  :deep(.p-inputtext){
+    width: 100%;
+  }
+
+  
+}
+.error_message {
+  color: red;
+}
+.field_error {
+  border: 1px solid red !important;
+  border-radius: 8px;
+}

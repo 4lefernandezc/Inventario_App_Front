@@ -66,6 +66,7 @@ function saveProduct() {
 
 function editProduct(prod) {
     product.value = { ...prod };
+    console.log(product.value);
     productDialog.value = true;
 }
 

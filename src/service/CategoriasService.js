@@ -1,19 +1,13 @@
 import http from '@/plugins/axios';
 
-const API_URL = '/productos';
+const API_URL = '/categorias';
 
-export const ProductosService = {
-    async getAll(params) {
-        return http.get(API_URL, { params });
+export const CategoriasService = {
+    async getAll() {
+        return http.get(API_URL);
     },
     async get(id) {
         return http.get(`${API_URL}/${id}`);
-    },
-    async getByCategoria(id) {
-        return http.get(`${API_URL}/categoria/${id}`);
-    },
-    async getByProveedor(id) {
-        return http.get(`${API_URL}/proveedor/${id}`);
     },
     async create(data) {
         return http.post(API_URL, data);
