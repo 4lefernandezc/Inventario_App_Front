@@ -181,6 +181,13 @@ function onPageChange(event: number) {
 
 function onFilterChange() {
     filters.value.page = 1;
+    if (filters.value.documento === '') filters.value.documento = null;
+    if (filters.value.tipoDocumento === '') filters.value.tipoDocumento = null;
+    if (filters.value.nombre === '') filters.value.nombre = null;
+    if (filters.value.apellido === '') filters.value.apellido = null;
+    if (filters.value.direccion === '') filters.value.direccion = null;
+    if (filters.value.telefono === '') filters.value.telefono = null;
+    if (filters.value.correo === '') filters.value.correo = null;
     getClientes();
 }
 
@@ -215,37 +222,37 @@ onMounted(() => {
             <!-- Columns con filtros -->
             <Column field="nombre" header="Nombre" :showFilterMenu="false">
                 <template #filter>
-                    <InputText v-if="showFilters" v-model.trim="filters.nombre" type="text" class="p-inputtext-sm" placeholder="Buscar por nombre" maxlength="30" @blur="onFilterChange" />
+                    <InputText v-if="showFilters" v-model.trim="filters.nombre" type="text" class="p-inputtext-sm" placeholder="Buscar por nombre" maxlength="30" @blur="filters.nombre !== null ? onFilterChange() : null" />
                 </template>
             </Column>
 
             <Column field="apellido" header="Apellido" :showFilterMenu="false">
                 <template #filter>
-                    <InputText v-if="showFilters" v-model.trim="filters.apellido" type="text" class="p-inputtext-sm" placeholder="Buscar apellido" @blur="onFilterChange" />
+                    <InputText v-if="showFilters" v-model.trim="filters.apellido" type="text" class="p-inputtext-sm" placeholder="Buscar apellido" @blur="filters.apellido !== null ? onFilterChange() : null" />
                 </template>
             </Column>
 
             <Column field="documento" header="Documento" :showFilterMenu="false">
                 <template #filter>
-                    <InputText v-if="showFilters" v-model.trim="filters.documento" type="text" class="p-inputtext-sm" placeholder="Buscar por documento" maxlength="30" @blur="onFilterChange" />
+                    <InputText v-if="showFilters" v-model.trim="filters.documento" type="text" class="p-inputtext-sm" placeholder="Buscar por documento" maxlength="30" @blur="filters.documento !== null ? onFilterChange() : null" />
                 </template>
             </Column>
 
             <Column field="tipoDocumento" header="Tipo Documento" :showFilterMenu="false">
                 <template #filter>
-                    <InputText v-if="showFilters" v-model.trim="filters.tipoDocumento" type="text" class="p-inputtext-sm" placeholder="Buscar tipo" @blur="onFilterChange" />
+                    <InputText v-if="showFilters" v-model.trim="filters.tipoDocumento" type="text" class="p-inputtext-sm" placeholder="Buscar tipo" @blur="filters.tipoDocumento !== null ? onFilterChange() : null" />
                 </template>
             </Column>
 
             <Column field="telefono" header="Teléfono" :showFilterMenu="false">
                 <template #filter>
-                    <InputText v-if="showFilters" v-model.trim="filters.telefono" type="text" class="p-inputtext-sm" placeholder="Buscar teléfono" @blur="onFilterChange" />
+                    <InputText v-if="showFilters" v-model.trim="filters.telefono" type="text" class="p-inputtext-sm" placeholder="Buscar teléfono" @blur="filters.telefono !== null ? onFilterChange() : null" />
                 </template>
             </Column>
 
             <Column field="correo" header="Correo" :showFilterMenu="false">
                 <template #filter>
-                    <InputText v-if="showFilters" v-model.trim="filters.correo" type="text" class="p-inputtext-sm" placeholder="Buscar correo" @blur="onFilterChange" />
+                    <InputText v-if="showFilters" v-model.trim="filters.correo" type="text" class="p-inputtext-sm" placeholder="Buscar correo" @blur="filters.correo !== null ? onFilterChange() : null" />
                 </template>
             </Column>
 
