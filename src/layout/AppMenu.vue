@@ -5,30 +5,14 @@ import AppMenuItem from './AppMenuItem.vue';
 
 const model = ref([
     {
-        label: 'Home',
+        label: 'Inicio',
         items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/' }]
     },
     {
-        label: 'Pages',
+        label: 'Administración',
         icon: 'pi pi-fw pi-briefcase',
         to: '/pages',
         items: [
-            {
-                label: 'Auth',
-                icon: 'pi pi-fw pi-user',
-                items: [
-                    {
-                        label: 'Login',
-                        icon: 'pi pi-fw pi-sign-in',
-                        to: '/auth/login'
-                    }
-                ]
-            },
-            {
-                label: 'Crud',
-                icon: 'pi pi-fw pi-pencil',
-                to: '/pages/crud'
-            },
             {
                 label: 'Ingredientes',
                 icon: 'pi pi-fw pi-th-large',
@@ -40,9 +24,9 @@ const model = ref([
                 to: '/pages/proveedores'
             },
             {
-                label: 'Categorias',
-                icon: 'pi pi-fw pi-circle-off',
-                to: '/pages/categorias'
+                label: 'Sucursales',
+                icon: 'pi pi-fw pi-warehouse',
+                to: '/pages/sucursales'
             },
             {
                 label: 'Roles',
@@ -56,7 +40,7 @@ const model = ref([
             },
             {
                 label: 'Clientes',
-                icon: 'pi pi-fw pi-circle-off',
+                icon: 'pi pi-fw pi-address-book',
                 to: '/pages/clientes'
             }
         ]
@@ -65,10 +49,15 @@ const model = ref([
         label: 'Demos',
         items: [
             {
+                label: 'Crud',
+                icon: 'pi pi-fw pi-pencil',
+                to: '/pages/crud'
+            },
+            {
                 label: 'Demo Ventas',
                 icon: 'pi pi-fw pi-shopping-cart',
                 to: '/demo-ventas'
-            }
+            }, 
         ]
     }
 ]);
