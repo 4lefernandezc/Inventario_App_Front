@@ -1,8 +1,8 @@
 import http from '@/plugins/axios';
 
-const API_URL = '/categorias';
+const API_URL = '/ingredientes';
 
-export const CategoriasService = {
+export const IngredientesService = {
     async getAll(params) {
         return http.get(API_URL, { params });
     },

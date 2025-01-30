@@ -16,9 +16,9 @@ const router = createRouter({
                     component: () => import('@/views/Dashboard.vue')
                 },
                 {
-                    path: '/pages/productos',
-                    name: 'productos',
-                    component: () => import('@/views/pages/Productos.vue')
+                    path: '/pages/ingredientes',
+                    name: 'ingredientes',
+                    component: () => import('@/views/pages/Ingredientes.vue')
                 },
                 {
                     path: '/pages/proveedores',
@@ -35,11 +35,11 @@ const router = createRouter({
                     name: 'roles',
                     component: () => import('@/views/pages/Roles.vue')
                 },
-                // {
-                //     path: '/pages/usuarios',
-                //     name: 'usuarios',
-                //     component: () => import('@/views/pages/Usuarios.vue')
-                // },
+                {
+                    path: '/pages/usuarios',
+                    name: 'usuarios',
+                    component: () => import('@/views/pages/Usuarios.vue')
+                },
                 {
                     path: '/pages/clientes',
                     name: 'clientes',

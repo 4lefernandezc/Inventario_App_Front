@@ -3,8 +3,8 @@ import http from '@/plugins/axios';
 const API_URL = '/roles';
 
 export const RolesService = {
-    async getAll() {
-        return http.get(API_URL);
+    async getAll(params) {
+        return http.get(API_URL, { params });
     },
     async get(id) {
         return http.get(`${API_URL}/${id}`);
