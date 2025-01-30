@@ -10,12 +10,9 @@ import { onMounted, ref } from 'vue';
 interface Cliente {
     id?: number;
     documento?: string;
-    tipoDocumento?: string;
     nombre?: string;
     apellido?: string;
-    direccion?: string;
     telefono?: string;
-    correo?: string;
     activo?: boolean;
     fechaCreacion?: string;
     linkWhatsapp?: string;
@@ -37,19 +34,15 @@ const filters = ref({
     sord: 'ASC',
     sidx: 'id',
     documento: null,
-    tipoDocumento: null,
     nombre: null,
     apellido: null,
-    direccion: null,
     telefono: null,
-    correo: null,
     activo: null
 });
 
 function openNew() {
     cliente.value = {
         documento: '',
-        tipoDocumento: '',
         nombre: '',
         apellido: '',
         activo: false
@@ -69,12 +62,9 @@ function clearFilters() {
         sord: 'ASC',
         sidx: 'id',
         documento: '',
-        tipoDocumento: '',
         nombre: '',
         apellido: '',
-        direccion: '',
         telefono: '',
-        correo: '',
         activo: null
     };
     getClientes();
@@ -114,11 +104,13 @@ async function createCliente() {
 async function updateCliente() {
     loading.value = true;
     try {
-        delete cliente.value.fechaCreacion;
-        delete cliente.value.fechaModificacion;
-        delete cliente.value.linkWhatsapp;
-        console.log(cliente.value);
-        await ClientesService.update(cliente.value.id, cliente.value);
+        const clienteData = { ...cliente.value };
+        delete clienteData.id;
+        delete clienteData.fechaCreacion;
+        delete clienteData.fechaModificacion;
+        delete clienteData.linkWhatsapp;
+
+        await ClientesService.update(cliente.value.id, clienteData);
         toast.add({ severity: 'success', summary: 'Éxito', detail: 'Cliente Actualizado', life: 3000 });
         hideDialog();
         await getClientes();
@@ -182,12 +174,9 @@ function onPageChange(event: number) {
 function onFilterChange() {
     filters.value.page = 1;
     if (filters.value.documento === '') filters.value.documento = null;
-    if (filters.value.tipoDocumento === '') filters.value.tipoDocumento = null;
     if (filters.value.nombre === '') filters.value.nombre = null;
     if (filters.value.apellido === '') filters.value.apellido = null;
-    if (filters.value.direccion === '') filters.value.direccion = null;
     if (filters.value.telefono === '') filters.value.telefono = null;
-    if (filters.value.correo === '') filters.value.correo = null;
     getClientes();
 }
 
@@ -238,21 +227,9 @@ onMounted(() => {
                 </template>
             </Column>
 
-            <Column field="tipoDocumento" header="Tipo Documento" :showFilterMenu="false">
-                <template #filter>
-                    <InputText v-if="showFilters" v-model.trim="filters.tipoDocumento" type="text" class="p-inputtext-sm" placeholder="Buscar tipo" @blur="filters.tipoDocumento !== null ? onFilterChange() : null" />
-                </template>
-            </Column>
-
             <Column field="telefono" header="Teléfono" :showFilterMenu="false">
                 <template #filter>
                     <InputText v-if="showFilters" v-model.trim="filters.telefono" type="text" class="p-inputtext-sm" placeholder="Buscar teléfono" @blur="filters.telefono !== null ? onFilterChange() : null" />
-                </template>
-            </Column>
-
-            <Column field="correo" header="Correo" :showFilterMenu="false">
-                <template #filter>
-                    <InputText v-if="showFilters" v-model.trim="filters.correo" type="text" class="p-inputtext-sm" placeholder="Buscar correo" @blur="filters.correo !== null ? onFilterChange() : null" />
                 </template>
             </Column>
 
@@ -307,10 +284,6 @@ onMounted(() => {
                     <InputText v-model="cliente.documento" id="documento" />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="tipoDocumento">Tipo Documento</label>
-                    <InputText v-model="cliente.tipoDocumento" id="tipoDocumento" />
-                </div>
-                <div class="flex flex-col gap-2">
                     <label for="nombre">Nombre</label>
                     <InputText v-model="cliente.nombre" id="nombre" />
                 </div>
@@ -319,16 +292,8 @@ onMounted(() => {
                     <InputText v-model="cliente.apellido" id="apellido" />
                 </div>
                 <div class="flex flex-col gap-2">
-                    <label for="direccion">Dirección</label>
-                    <InputText v-model="cliente.direccion" id="direccion" />
-                </div>
-                <div class="flex flex-col gap-2">
                     <label for="telefono">Teléfono</label>
                     <InputText v-model="cliente.telefono" id="telefono" />
-                </div>
-                <div class="flex flex-col gap-2">
-                    <label for="correo">Correo</label>
-                    <InputText v-model="cliente.correo" id="correo" />
                 </div>
                 <div class="flex flex-col gap-2">
                     <label for="activo">Activo</label>
