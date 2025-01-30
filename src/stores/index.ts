@@ -25,7 +25,7 @@ const useAuthStore = defineStore('auth', {
         logout() {
             localStorage.clear();
             this.$reset();
-            router.push('auth/login');
+            router.push('/auth/login');
         }
     }
 });

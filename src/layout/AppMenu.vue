@@ -30,13 +30,13 @@ const model = ref([
                 to: '/pages/crud'
             },
             {
-                label: 'Productos',
-                icon: 'pi pi-fw pi-circle-off',
-                to: '/pages/productos'
+                label: 'Ingredientes',
+                icon: 'pi pi-fw pi-th-large',
+                to: '/pages/ingredientes'
             },
             {
                 label: 'Proveedores',
-                icon: 'pi pi-fw pi-circle-off',
+                icon: 'pi pi-fw pi-truck',
                 to: '/pages/proveedores'
             },
             {
@@ -46,12 +46,12 @@ const model = ref([
             },
             {
                 label: 'Roles',
-                icon: 'pi pi-fw pi-circle-off',
+                icon: 'pi pi-fw pi-sliders-h',
                 to: '/pages/roles'
             },
             {
                 label: 'Usuarios',
-                icon: 'pi pi-fw pi-circle-off',
+                icon: 'pi pi-fw pi-users',
                 to: '/pages/usuarios'
             },
             {
